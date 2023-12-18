@@ -1,0 +1,32 @@
+package officet.officet_service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import officet.officet_dao.A02_ApprovalDao;
+import officet.officet_vo.Approval;
+@Service
+public class A02_ApprovalService {
+   @Autowired
+   private A02_ApprovalDao dao;
+   
+   public List<Approval> getApprovalList(){      
+      System.out.println("getApprovalList 불러오기");
+      return dao.getApprovalList(); 
+   }
+   public List<Approval> getApprovalList1(){      
+      System.out.println("getApprovalList1 불러오기");
+      return dao.getApprovalList1(); 
+   }
+   public List<Approval> getApprovalList2(){      
+      System.out.println("getApprovalList2 불러오기");
+      return dao.getApprovalList2(); 
+   }
+
+   public void updateApprovalStatus(int approvalId, int status) {
+       dao.updateApprovalStatus(approvalId, status);
+   }
+
+}

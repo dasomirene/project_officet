@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="worker" type="officet.officet_vo.Worker"/>
+		<typeAlias alias="team" type="officet.officet_vo.Team"/>
+		<typeAlias alias="attendance" type="officet.officet_vo.Attendance"/>
+		<typeAlias alias="approver" type="officet.officet_vo.Approver"/>
+		<typeAlias alias="approval" type="officet.officet_vo.Approval"/>
+		<typeAlias alias="approval_step" type="officet.officet_vo.Approval_step"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="resource/A01_WorkerMapper.xml"/>
+		<mapper resource="/resource/A02_ApprovalMapper.xml"/>
+		<mapper resource="/resource/A03_AttendanceMapper.xml"/>
+	</mappers>
+</configuration>

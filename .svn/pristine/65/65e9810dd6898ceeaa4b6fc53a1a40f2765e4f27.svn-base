@@ -1,0 +1,55 @@
+
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import officet.officet_vo.Attendance;
+import officet.officet_vo.Worker;
+
+public interface A01_WorkerDao {
+	public List<Worker> getAllWorker();
+	public Worker loginCheck(@Param("worker_id") int worker_id,
+							  @Param("pass") String pass);
+	// 유저정보
+	   public Worker getUserInfo(@Param("worker_id")int worker_id);
+	// 출근
+	   @Insert("INSERT INTO attendance values(att_seq.nextval, #{worker_id}, sysdate, sysdate, NULL, #{check_in_status}, null)")
+	   public void check_in(@Param("worker_id")int worker_id, @Param("check_in_status") String check_in_status);
+	   // 출근/퇴근 시간 가져오기
+	   @Select("SELECT * FROM attendance WHERE to_char(today_date,'yyyy-mm-dd')=to_char(sysdate,'yyyy-mm-dd') and worker_id=#{worker_id}")
+	   public Attendance getAttInfo(@Param("worker_id")int worker_id);
+	   // 퇴근
+	// 퇴근
+	   @Update("UPDATE attendance SET CHECK_OUT_TIME=sysdate, CHECK_OUT_STATUS=#{check_out_status} WHERE to_char(today_date,'yyyy-mm-dd')=to_char(sysdate,'yyyy-mm-dd') and worker_id=#{worker_id}")
+	   public void check_out(@Param("worker_id")int worker_id, @Param("check_out_status") String check_out_status);
+	// 최근출결기록
+	   @Select("SELECT * FROM attendance WHERE worker_id=#{worker_id} AND to_char(TODAY_DATE,'yyyy-mm')=to_char(sysdate,'yyyy-mm') ORDER BY ATTENDANCE_ID")
+	   public List<Attendance> getRecentAttList(@Param("worker_id") int worker_id);
+
+	
+	//프로필 수정dao
+	public Worker uptProfile(
+			@Param("n_name") String n_name,
+			@Param("p_number") String p_number,
+			@Param("region") String region,
+			@Param("worker_id") int worker_id
+			);
+	//프로필 조회
+	public Worker getProfile(@Param("worker_id") int worker_id);
+	
+	//사원조회
+	public List<Worker>schWorker();
+	public List<String>getAllTeams();
+	public List<String>getAllWorkerNames();
+	public List<Worker>schWorkerByTeam(String team_name);
+	public List<Worker>schWorkerByName(String name);
+
+
+}
+
+ 

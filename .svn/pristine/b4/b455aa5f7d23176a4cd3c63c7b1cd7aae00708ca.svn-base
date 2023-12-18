@@ -1,0 +1,25 @@
+
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import officet.officet_vo.Worker;
+
+public interface A01_WorkerDao {
+	public List<Worker> getAllWorker();
+	public Worker loginCheck(@Param("worker_id") int worker_id,
+							  @Param("pass") String pass);
+	//프로필 수정dao
+	public Worker uptProfile(
+			@Param("n_name") String n_name,
+			@Param("p_number") String p_number,
+			@Param("region") String region,
+			@Param("worker_id") int worker_id
+			);
+	//프로필 조회
+	public Worker getProfile(@Param("worker_id") int worker_id);
+}
+
+ 

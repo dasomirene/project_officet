@@ -1,0 +1,150 @@
+package officet.officet_vo;
+
+import java.util.Date;
+
+// 사원
+public class Worker {
+
+	// 필드
+	private int worker_id; // 사원 id (pk)
+	private int team_id; // 팀 id (fk)
+	private String name; // 이름
+	private String team_name; // 이름
+	private String n_name; // 닉네임 (unique)
+	private String pass; // 비번
+	private String p_number; // 전화번호
+	private String position_name; // 직책명
+	private Date hire_date; // 입사일
+	private int sal; // 급여
+	private String region; // 지역
+	private String auth; // 권한
+	private int mgr; // 관리자 id (계층형 구조)
+
+	// 생성자
+	public Worker() {
+	}
+
+	public Worker(int worker_id, int team_id, String name, String n_name, String pass, String p_number,
+			String position_name, Date hire_date, int sal, String region, String auth, int mgr) {
+		this.worker_id = worker_id;
+		this.team_id = team_id;
+		this.name = name;
+		this.n_name = n_name;
+		this.pass = pass;
+		this.p_number = p_number;
+		this.position_name = position_name;
+		this.hire_date = hire_date;
+		this.sal = sal;
+		this.region = region;
+		this.auth = auth;
+		this.mgr = mgr;
+	}
+
+	// getter / setter
+
+
+	public int getWorker_id() {
+		return worker_id;
+	}
+
+	public void setWorker_id(int worker_id) {
+		this.worker_id = worker_id;
+	}
+
+	public int getTeam_id() {
+		return team_id;
+	}
+
+	public void setTeam_id(int team_id) {
+		this.team_id = team_id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getN_name() {
+		return n_name;
+	}
+
+	public void setN_name(String n_name) {
+		this.n_name = n_name;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public String getP_number() {
+		return p_number;
+	}
+
+	public void setP_number(String p_number) {
+		this.p_number = p_number;
+	}
+
+	public String getPosition_name() {
+		return position_name;
+	}
+
+	public void setPosition_name(String position_name) {
+		this.position_name = position_name;
+	}
+
+	public Date getHire_date() {
+		return hire_date;
+	}
+
+	public void setHire_date(Date hire_date) {
+		this.hire_date = hire_date;
+	}
+
+	public int getSal() {
+		return sal;
+	}
+
+	public void setSal(int sal) {
+		this.sal = sal;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getAuth() {
+		return auth;
+	}
+
+	public void setAuth(String auth) {
+		this.auth = auth;
+	}
+
+	public int getMgr() {
+		return mgr;
+	}
+
+	public void setMgr(int mgr) {
+		this.mgr = mgr;
+	}
+
+	public String getTeam_name() {
+		return team_name;
+	}
+
+	public void setTeam_name(String team_name) {
+		this.team_name = team_name;
+	}
+
+}

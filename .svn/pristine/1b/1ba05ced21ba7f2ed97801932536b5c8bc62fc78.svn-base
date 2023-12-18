@@ -1,0 +1,121 @@
+package officet.officet_controller;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+
+import officet.officet_service.A01_WorkerService;
+import officet.officet_service.A03_AttendanceService;
+import officet.officet_vo.Attendance;
+import officet.officet_vo.Worker;
+
+@Controller
+public class A02_Controller_Main {
+
+	@Autowired
+	A01_WorkerService wrkService;
+	@Autowired
+	A03_AttendanceService attService;
+	
+
+	// 메인접속
+	   @RequestMapping("main.do")
+	   public String main(Model d, HttpServletRequest request) {
+	      System.out.println("메인페이지 접속");
+	      HttpSession session = request.getSession();
+	      int worker_id = (Integer)session.getAttribute("worker_id");
+	      String auth = (String)session.getAttribute("auth");
+	      Worker w = wrkService.getUserInfo(worker_id);
+	      System.out.println("전달된 세션 값 >>>>"+worker_id+" "+auth);
+	      System.out.println("직원아이디로 가져온 객체 >>>>"+w.getName());
+	      d.addAttribute("userInfo",w);
+	      List<Worker> workerInfo = wrkService.getAllWorker();
+	      d.addAttribute("workerInfo", workerInfo);
+	      return "WEB-INF\\views\\officet\\index.jsp";
+	   }
+	   // 출퇴근 조회
+	   @RequestMapping(value="checkAtt.do", method= {RequestMethod.GET})
+	   @ResponseBody
+	   public String checkAtt(@RequestParam("worker_id") int worker_id) {
+	      Map<String, Boolean> attInfo = wrkService.checkAtt(worker_id);
+	      System.out.println("결과값 : 출근 했나요?"+attInfo.get("check_in")+"\n\t퇴근했나요?"+attInfo.get("check_out"));
+	      Gson g = new Gson();
+	      g.toJson(attInfo);
+	      System.out.println(g.toJson(attInfo));
+	      return g.toJson(attInfo);
+	   }
+	   // 출근버튼
+	   @RequestMapping(value = "arrival.do", produces = "application/text; charset=utf8")
+	   @ResponseBody
+	   public String arrival(@RequestParam("worker_id") int worker_id, Model d) {
+	      System.out.println("도착했다");
+	      wrkService.check_in(worker_id);
+	      Attendance attInfo = wrkService.getAttInfo(worker_id);
+	      Date check_in_time =attInfo.getCheck_in_time();
+	      SimpleDateFormat formatter = new SimpleDateFormat("HH시 mm분 ss초");
+	      String check_in_timeS=formatter.format(check_in_time);
+	      System.out.println("데이터 잘 넣었고요, 시간도 받아옴 "+check_in_timeS);
+	      return check_in_timeS;
+	   }
+	// 퇴근버튼
+	      @RequestMapping(value = "leave.do", produces = "application/text;charset=utf-8",  method= {RequestMethod.GET})
+	      @ResponseBody
+	      public String leave(@RequestParam("worker_id") int worker_id, Model d) {
+	         wrkService.check_out(worker_id);
+	         Attendance attInfo = wrkService.getAttInfo(worker_id);
+	         Date check_out_time = attInfo.getCheck_out_time();
+	         SimpleDateFormat formatter = new SimpleDateFormat("HH시 mm분 ss초");
+	         String check_out_timeS=formatter.format(check_out_time);
+	         return check_out_timeS;
+	      }
+	      // 로그아웃
+	      @RequestMapping(value="logout.do", produces="application/text;charset=utf-8", method= {RequestMethod.GET})
+	      @ResponseBody
+	      public String logout(HttpSession session) {
+	         String result ="";
+	         session.invalidate();
+	         System.out.println("세션 아이디 종료 >>>> 세션 : "+session);
+	         result="success";
+	         return result;
+	      }
+
+	   // 최근 출격 기록 요약 가져오기
+	         @RequestMapping("recentAttSum.do")
+	         @ResponseBody
+	         public ResponseEntity<Map<String,Integer>> getRecentAttSum(@RequestParam("worker_id") int worker_id) {
+	            return ResponseEntity.ok(wrkService.getRecentAttSum(worker_id));
+	         }
+	    // 출결 검색 기록 가져오기
+	         @RequestMapping("attSch.do")
+	         @ResponseBody
+	         public ResponseEntity<List<Attendance>> getAttSch(@RequestParam("worker_id") int worker_id,
+	                                                @RequestParam("check_in_status") String check_in_status,
+	                                                @RequestParam("check_out_status") String check_out_status,
+	                                                @RequestParam("year") int year,
+	                                                @RequestParam("month") int month
+	                                                ){
+	            System.out.println("???? 뭔데 도대체"+worker_id+ " "+check_in_status);
+	            List<Attendance> attList = attService.getAttSch(worker_id, check_in_status, check_out_status, year, month);
+	            System.out.println("검색 컨트롤러단 >>>>>>> "+attList);
+	            return ResponseEntity.ok(attService.getAttSch(worker_id, check_in_status, check_out_status, year, month));
+	         }
+	      
+
+
+
+}

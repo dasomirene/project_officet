@@ -1,0 +1,51 @@
+package officet.officet_controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import officet.officet_service.A02_ApprovalService;
+import officet.officet_vo.Approval;
+
+
+
+@Controller
+public class A04_Controller_Approval {
+   // http://49.238.170.29:5070/officet/approval_req.do
+@Autowired
+   A02_ApprovalService apservice;
+   @RequestMapping("approval_req.do")
+   public String approval_req() {
+      System.out.println("결재요청 페이지 접속");
+      return"WEB-INF\\views\\officet\\approval_req.jsp";
+   }
+   @RequestMapping("approval_app.do")
+   public String approval_app(Model d) {
+      System.out.println("결재승인 페이지 접속");
+      List<Approval> approvalInfo = apservice.getApprovalList();
+      List<Approval> approvalInfo1 = apservice.getApprovalList1();
+      List<Approval> approvalInfo2 = apservice.getApprovalList2();
+      d.addAttribute("approvalInfo",approvalInfo);
+      d.addAttribute("approvalInfo1",approvalInfo1);
+      d.addAttribute("approvalInfo2",approvalInfo2);
+      return"WEB-INF\\views\\officet\\approval_app.jsp";
+   }
+   @PostMapping("updateApprovalStatus.do")
+   @ResponseBody
+   public String updateApprovalStatus(@RequestParam("approvalId") int approvalId,
+           @RequestParam("status") int status) {
+       apservice.updateApprovalStatus(approvalId, status);
+       return "success";
+   }
+   @RequestMapping("approval_status.do")
+   public String approval_status() {
+      System.out.println("결재현황 페이지 접속");
+      return"WEB-INF\\views\\officet\\approval_status.jsp";
+   }
+}

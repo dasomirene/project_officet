@@ -1,0 +1,62 @@
+package backendWeb.a01_dao;
+
+import java.sql.Connection;
+
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import backendWeb.z01_vo.Employee;
+import backendWeb.z01_vo.Part;
+
+// ctrl+shift+o
+// frontWeb.A04_PreparedDao
+public class A00_PartDao {
+    private Connection con;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
+    public Part partInfo(int pNum, String pKind) {
+    	Part par = null;
+		String sql = "SELECT * FROM Part\r\n"+"WHERE partNum=? AND partKind = ?";
+		//1. 연결(기본예외/자원해제)
+		try {
+			con = DB.con();
+			// 2. 대화(sql 전달 후, 매개변수로 전달)
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, pNum);
+			pstmt.setString(2, pKind);
+			// 3. 결과
+			rs = pstmt.executeQuery();
+			// 4. (ResultSet ==> VO) ? 단일/여러개 if/while			
+			if(rs.next()) {
+				par = new Part(
+					rs.getInt("partNum"),
+					rs.getString("partName"),
+					rs.getString("partKind"),
+					rs.getString("company"),
+					rs.getInt("price")								
+				);
+			}
+			// 
+		} catch (SQLException e) {
+			System.out.println("DB:"+e.getMessage());
+		}catch(Exception e) {
+			System.out.println("기타:"+e.getMessage());
+		}finally {
+			DB.close(rs, pstmt, con);
+		}
+		return par;
+	}
+   
+
+    
+
+	public static void main(String[] args) {
+        A00_PartDao dao = new A00_PartDao();
+
+    }
+}

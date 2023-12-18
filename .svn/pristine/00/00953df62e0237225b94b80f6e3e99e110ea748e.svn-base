@@ -1,0 +1,20 @@
+package officet.officet_MVC;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import officet.officet_Dao.Workers_Dao;
+import officet.officet_vo.Workers;
+
+@Service
+public class Op_Service {
+	@Autowired
+	private Workers_Dao dao;
+	
+	public List<Workers> getWorkers(Workers sch){
+		if(sch.getName()==null) sch.setName("");
+		return dao.getWorkers(sch);
+	}
+}

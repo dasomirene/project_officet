@@ -1,0 +1,13 @@
+package officet.officet_controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class A02_Controller_Main {
+	@RequestMapping("main.do")
+	public String main() {
+		System.out.println("메인페이지 접속");
+		return"WEB-INF\\views\\officet\\index.jsp";
+	}
+}

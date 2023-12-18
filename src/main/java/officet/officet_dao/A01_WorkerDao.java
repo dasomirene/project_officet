@@ -1,0 +1,206 @@
+
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import officet.officet_vo.Approval_sch;
+import officet.officet_vo.Attendance;
+import officet.officet_vo.Team;
+import officet.officet_vo.Worker;
+
+public interface A01_WorkerDao {
+	public List<Worker> getAllWorker();
+	public Worker loginCheck(@Param("worker_id") int worker_id,
+							  @Param("pass") String pass);
+	// 유저정보
+	   public Worker getUserInfo(@Param("worker_id")int worker_id);
+	// 출근
+	   @Insert("INSERT INTO attendance values(att_seq.nextval, #{worker_id}, sysdate, sysdate, NULL, #{check_in_status}, null)")
+	   public void check_in(@Param("worker_id")int worker_id, @Param("check_in_status") String check_in_status);
+	   // 출근/퇴근 시간 가져오기
+	   @Select("SELECT * FROM attendance WHERE to_char(today_date,'yyyy-mm-dd')=to_char(sysdate,'yyyy-mm-dd') and worker_id=#{worker_id}")
+	   public Attendance getAttInfo(@Param("worker_id")int worker_id);
+	   // 퇴근
+	// 퇴근
+	   @Update("UPDATE attendance SET CHECK_OUT_TIME=sysdate, CHECK_OUT_STATUS=#{check_out_status} WHERE to_char(today_date,'yyyy-mm-dd')=to_char(sysdate,'yyyy-mm-dd') and worker_id=#{worker_id}")
+	   public void check_out(@Param("worker_id")int worker_id, @Param("check_out_status") String check_out_status);
+	// 최근출결기록
+	   @Select("SELECT * FROM attendance WHERE worker_id=#{worker_id} AND to_char(TODAY_DATE,'yyyy-mm')=to_char(sysdate,'yyyy-mm') ORDER BY ATTENDANCE_ID")
+	   public List<Attendance> getRecentAttList(@Param("worker_id") int worker_id);
+	// 사원번호 찾기
+	      @Select("SELECT worker_id\r\n"
+	            + "FROM WORKER\r\n"
+	            + "WHERE name=#{name}\r\n"
+	            + "AND p_number=#{p_number}")
+	      public String findId(Worker worker);
+	      
+	// 비밀번호 재설정
+	// 재설정 전 id,전화번호 확인
+	      @Select("SELECT count(*)\r\n"
+	            + "FROM worker\r\n"
+	            + "WHERE worker_id=#{worker_id}\r\n"
+	            + "AND p_number=#{p_number}")
+	      public int checkWorker(Worker worker);
+	      
+	// 비밀번호 재설정
+	      @Update("UPDATE WORKER\r\n"
+	            + "SET PASS =#{pass}\r\n"
+	            + "WHERE WORKER_ID = #{worker_id}")
+	      public int uptPass(Worker worker);
+
+
+	
+	    //프로필 수정dao
+	      @Update("UPDATE WORKER\r\n"
+	            + "SET\r\n"
+	            + "N_NAME=#{n_name},\r\n"
+	            + "P_NUMBER=#{p_number},\r\n"
+	            + "REGION =#{region}\r\n"
+	            + "WHERE WORKER_ID=#{worker_id}")
+	      public int uptProfile(Worker worker);
+	//프로필 조회
+    @Select("SELECT *\r\n"
+          + "FROM WORKER w, TEAM t, WORKER_IMG wi\r\n"
+          + "WHERE w.TEAM_ID = t.TEAM_ID\r\n"
+          + "AND w.WORKER_ID = wi.WORKER_ID\r\n"
+          + "AND w.WORKER_ID = #{worker_id}")
+    public Worker getProfile(@Param("worker_id") int worker_id);
+
+
+	// 입사일 조회
+	   @Select("SELECT\r\n"
+	         + "TO_CHAR(hire_date,'YY')||'년 '||\r\n"
+	         + "TO_CHAR(hire_date,'MM')||'월 '||\r\n"
+	         + "TO_CHAR(hire_date,'DD')||'일'\r\n"
+	         + "hire_date FROM WORKER WHERE WORKER_ID=#{worker_id}")
+	   public String getHireDate(@Param("worker_id") int worker_id);
+//////////////////////////////////////////////////
+	   @Select("SELECT * FROM TEAM")
+	   public List<Team> getAllTeams();	   
+	   @Select("SELECT w.NAME\r\n"
+	         + "FROM TEAM t\r\n"
+	         + "JOIN WORKER w ON t.TEAM_ID = w.TEAM_ID\r\n"
+	         + "WHERE t.TEAM_NAME = #{team_name}")
+	   public List<Worker> getWorkersByTeam(@Param("team_name") String team_name);	   
+	   @Select(" SELECT\r\n"
+               + "    w.WORKER_ID,\r\n"
+               + "    t.TEAM_NAME,\r\n"
+               + "    w.NAME,\r\n"
+               + "    w.N_NAME,\r\n"
+               + "    w.P_NUMBER,\r\n"
+               + "    w.POSITION_NAME,\r\n"
+               + "    w.HIRE_DATE,\r\n"
+               + "    w.SAL,\r\n"
+               + "    w.AUTH\r\n"
+               + "FROM\r\n"
+               + "    WORKER w\r\n"
+               + "JOIN\r\n"
+               + "    TEAM t ON w.TEAM_ID = t.TEAM_ID\r\n"
+               + "    WHERE t.team_name LIKE '%'||#{team_name}||'%' AND w.name LIKE '%'||#{name}||'%'" )
+         public List<Worker> getWorkerList(Worker sch);
+         //등록
+         @Insert("INSERT INTO worker(worker_id,team_id,name,n_name,pass,p_number,position_name,hire_date,sal,auth)\r\n"
+               + "VALUES (#{worker_id},#{team_id},#{name},#{n_name},#{pass},#{p_number},#{position_name},#{hire_date},#{sal},#{auth})")
+         public int insertWorker(Worker ins);
+         
+         @Select("   SELECT count(*)\r\n"
+               + "   FROM worker \r\n"
+               + "   WHERE worker_id=#{worker_id}")
+         public int checkId(@Param("worker_id") int worker_id);
+         //상세
+         @Select("select * from worker where worker_id=#{worker_id}")
+         public Worker getWorker(@Param("worker_id") int worker_id);
+         //수정
+         @Update("update worker \r\n"
+               + "set team_id=#{team_id},\r\n"
+               + "    name=#{name},\r\n"
+               + "      n_name=#{n_name},\r\n"
+               + "      pass=#{pass},\r\n"
+               + "      p_number=#{p_number},\r\n"
+               + "      position_name=#{position_name},\r\n"
+               + "      hire_date=#{hire_dateS},\r\n"
+               + "      sal=#{sal},\r\n"
+               + "      auth=#{auth}\r\n"
+               + "where worker_id=#{worker_id}")
+         public int updateWorker(Worker upt);
+         //삭제
+         @Delete("delete \r\n"
+               + "from worker\r\n"
+               + "where worker_id=#{worker_id}")
+         public int deleteWorker(@Param("worker_id") int worker_id);
+         
+         
+       //결재관리(조회)
+         @Select("SELECT a.approval_id AS APPROVAL_ID , \r\n"
+               + "      A.APPROVAL_TYPE AS APPROVAL_TYPE ,\r\n"
+               + "      a.APPROVAL_MSG AS APPROVAL_MSG , \r\n"
+               + "      apps.step_name AS step_name, \r\n"
+               + "      APSN.APPROVAL_STATUS_NAME AS status_name, \r\n"
+               + "      a.approval_request_time AS approval_request_time,\r\n"
+               + "      t.TEAM_NAME AS approver_team,\r\n"
+               + "      apprvr.worker_id AS approver_num, \r\n"
+               + "      apprvr.name AS approver,\r\n"
+               + "      t2.TEAM_NAME as requester_team, \r\n"
+               + "      w.WORKER_ID AS requester_num, \r\n"
+               + "      w.name AS requester\r\n"
+               + "FROM approval a\r\n"
+               + "INNER JOIN worker w ON w.worker_id = a.WORKER_ID \r\n"
+               + "INNER JOIN (SELECT a.approver_id, w.WORKER_ID, w.name, w.TEAM_ID \r\n"
+               + "FROM approver a INNER JOIN WORKER w ON a.WORKER_ID=w.WORKER_ID) apprvr \r\n"
+               + "ON apprvr.approver_id=a.APPROVER_ID \r\n"
+               + "LEFT JOIN approval_step apps ON apps.APPROVAL_STEP_ID =a.aPPROVAL_STEP\r\n"
+               + "LEFT JOIN APPROVAL_STATUS APSN ON APSN.APPROVAL_STATUS_ID =A.APPROVAL_STATUS \r\n"
+               + "LEFT JOIN team t ON apprvr.team_id=t.TEAM_ID\r\n"
+               + "LEFT JOIN team t2 ON w.TEAM_ID =t2.TEAM_ID \r\n"
+               + "WHERE APSN.APPROVAL_STATUS_NAME LIKE '%'||#{status_name}||'%' and t.team_name LIKE '%'||#{approver_team}||'%' AND apprvr.name LIKE '%'||#{approver}||'%'\r\n"
+               + "AND t2.team_name LIKE '%'||#{requester_team}||'%' AND w.name LIKE '%'||#{requester}||'%'" )
+           public List<Approval_sch> getAppList(Approval_sch sch);
+           //결재관리(상세)
+           @Select("SELECT a.approval_id AS APPROVAL_ID , \r\n"
+           		+ "      A.APPROVAL_TYPE AS APPROVAL_TYPE ,\r\n"
+           		+ "      a.APPROVAL_MSG AS APPROVAL_MSG , \r\n"
+           		+ "      apps.step_name AS step_name, \r\n"
+           		+ "      APSN.APPROVAL_STATUS_NAME AS status_name, \r\n"
+           		+ "      a.approval_request_time AS approval_request_time,\r\n"
+           		+ "      t.TEAM_NAME AS approver_team,\r\n"
+           		+ "      apprvr.worker_id AS approver_num, \r\n"
+           		+ "      apprvr.name AS approver,\r\n"
+           		+ "      t2.TEAM_NAME as requester_team, \r\n"
+           		+ "      w.WORKER_ID AS requester_num, \r\n"
+           		+ "      w.name AS requester\r\n"
+           		+ "FROM approval a\r\n"
+           		+ "INNER JOIN worker w ON w.worker_id = a.WORKER_ID \r\n"
+           		+ "INNER JOIN (SELECT a.approver_id, w.WORKER_ID, w.name, w.TEAM_ID \r\n"
+           		+ "FROM approver a INNER JOIN WORKER w ON a.WORKER_ID=w.WORKER_ID) apprvr \r\n"
+           		+ "ON apprvr.approver_id=a.APPROVER_ID \r\n"
+           		+ "LEFT JOIN approval_step apps ON apps.APPROVAL_STEP_ID =a.aPPROVAL_STEP\r\n"
+           		+ "LEFT JOIN APPROVAL_STATUS APSN ON APSN.APPROVAL_STATUS_ID =A.APPROVAL_STATUS \r\n"
+           		+ "LEFT JOIN team t ON apprvr.team_id=t.TEAM_ID\r\n"
+           		+ "LEFT JOIN team t2 ON w.TEAM_ID =t2.TEAM_ID \r\n"
+           		+ "WHERE a.approval_id=#{approval_id}")
+           public Approval_sch getAppDetail(@Param("approval_id") int approval_id);
+           //결재관리(수정)
+           @Update("update approval \r\n"
+                 + "set approval_msg=#{approval_msg},\r\n"
+                 + "    approval_type=#{approval_type},\r\n"                
+                 + "    approval_status=#{approval_status}\r\n"                
+                 + "where approval_id=#{approval_id}")
+           public int updateApproval(@Param("approval_msg") String approval_msg,
+                 @Param("approval_type") String approval_type,
+                 @Param("approval_status") int approval_status,
+                 @Param("approval_id") int approval_id   );
+           //결재관리(삭제)
+           @Delete("delete \r\n"
+                   + "from approval\r\n"
+                   + "where approval_id=#{approval_id}")
+             public int deleteApproval(@Param("approval_id") int approval_id);
+
+}
+
+ 

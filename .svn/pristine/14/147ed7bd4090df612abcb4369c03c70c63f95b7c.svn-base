@@ -1,0 +1,126 @@
+package officet.officet_vo;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+// 출결
+public class Attendance {
+
+   // 필드
+   private int attendance_id; // 출결 id
+   private int worker_id; // 사원 id
+   @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy년 MM월 dd일")
+   private Date today_date; // 오늘 날짜
+   @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH시 mm분 ss초")
+   private Date check_in_time; // 출근 시간
+   @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH시 mm분 ss초")
+   private Date check_out_time; // 퇴근 시간
+   private String check_in_status; // 출근 상태
+   private String check_out_status; // 퇴근 상태
+   private int year;
+   private int month;
+
+   // 생성자
+   public Attendance() {
+   }
+   
+   
+
+   public Attendance(int worker_id, String check_in_status, String check_out_status, int year, int month) {
+      super();
+      this.worker_id = worker_id;
+      this.check_in_status = check_in_status;
+      this.check_out_status = check_out_status;
+      this.year = year;
+      this.month = month;
+   }
+
+
+
+   public Attendance(int attendance_id, int worker_id, Date today_date, Date check_in_time, Date check_out_time,
+         String check_in_status, String check_out_status) {
+      this.attendance_id = attendance_id;
+      this.worker_id = worker_id;
+      this.today_date = today_date;
+      this.check_in_time = check_in_time;
+      this.check_out_time = check_out_time;
+      this.check_in_status = check_in_status;
+      this.check_out_status = check_out_status;
+   }
+
+   // getter / setter
+
+   public Date getToday_date() {
+      return today_date;
+   }
+
+   public int getAttendance_id() {
+      return attendance_id;
+   }
+
+   public void setAttendance_id(int attendance_id) {
+      this.attendance_id = attendance_id;
+   }
+
+   public int getWorker_id() {
+      return worker_id;
+   }
+
+   public void setWorker_id(int worker_id) {
+      this.worker_id = worker_id;
+   }
+
+   public void setToday_date(Date today_date) {
+      this.today_date = today_date;
+   }
+
+   public Date getCheck_in_time() {
+      return check_in_time;
+   }
+
+   public void setCheck_in_time(Date check_in_time) {
+      this.check_in_time = check_in_time;
+   }
+
+   public Date getCheck_out_time() {
+      return check_out_time;
+   }
+
+   public void setCheck_out_time(Date check_out_time) {
+      this.check_out_time = check_out_time;
+   }
+
+   public String getCheck_in_status() {
+      return check_in_status;
+   }
+
+   public void setCheck_in_status(String check_in_status) {
+      this.check_in_status = check_in_status;
+   }
+
+   public String getCheck_out_status() {
+      return check_out_status;
+   }
+
+   public void setCheck_out_status(String check_out_status) {
+      this.check_out_status = check_out_status;
+   }
+
+   public int getYear() {
+      return year;
+   }
+
+   public void setYear(int year) {
+      this.year = year;
+   }
+
+   public int getMonth() {
+      return month;
+   }
+
+   public void setMonth(int month) {
+      this.month = month;
+   }
+   
+}

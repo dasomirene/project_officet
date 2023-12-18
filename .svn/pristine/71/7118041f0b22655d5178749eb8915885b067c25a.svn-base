@@ -1,0 +1,61 @@
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
+
+import officet.officet_vo.Approval;
+import officet.officet_vo.Approver;
+import officet.officet_vo.Team;
+import officet.officet_vo.Worker;
+@Repository
+public interface A02_ApprovalDao {
+   public List<Approval> getApprovalList();
+   public List<Approval> getApprovalList1(@Param("worker_id")int worker_id);
+   public List<Approval> getApprovalList2(@Param("worker_id")int worker_id);
+   public List<Approval> getApprovalList3();
+   public void updateApprovalStatus(@Param("approvalId") int approvalId, @Param("status") int status);
+   @Select("SELECT * FROM TEAM")
+   public List<Team> getAllTeams();
+   @Select("SELECT w.NAME\r\n"
+         + "FROM TEAM t\r\n"
+         + "JOIN WORKER w ON t.TEAM_ID = w.TEAM_ID\r\n"
+         + "WHERE t.TEAM_NAME = #{team_Name}")
+   public List<Worker> getWorkersByTeam(@Param("team_Name") String team_Name);
+   @Select("SELECT\r\n"
+         + "    a.approval_id,\r\n"
+         + "    a.approval_step,\r\n"
+         + "    a.approval_status,\r\n"
+         + "    a.approval_request_time,\r\n"
+         + "    w1.name AS worker_name,\r\n"
+         + "    w2.name AS approver_name,\r\n"
+         + "    t.team_name\r\n"
+         + "FROM \r\n"
+         + "    approval a\r\n"
+         + "LEFT JOIN\r\n"
+         + "    worker w1 ON a.worker_id = w1.worker_id\r\n"
+         + "LEFT JOIN\r\n"
+         + "    approver ap ON a.approver_id = ap.approver_id\r\n"
+         + "LEFT JOIN\r\n"
+         + "    worker w2 ON ap.worker_id = w2.worker_id\r\n"
+         + "LEFT JOIN\r\n"
+         + "    team t ON w1.team_id = t.team_id\r\n"
+         + "WHERE\r\n"
+         + "    w1.NAME =#{worker_name}")
+   public List<Approval> getWorkersByTeamList(@Param("worker_name") String worker_name);
+   // 내가 신청한 결재 - 사원명 가져오기
+   @Select("SELECT w.name FROM worker w INNER JOIN team t ON w.TEAM_ID =t.TEAM_ID WHERE t.TEAM_NAME = #{team_name}")
+   public List<String> getTeamWorkers(@Param("team_name") String team_name);
+   
+   @Select("SELECT w.name AS worker_name,\r\n"
+	         + "      a.APPROVER_ID,\r\n"
+	         + "      a.WORKER_ID \r\n"
+	         + "            FROM approver a\r\n"
+	         + "            JOIN WORKER w ON a.WORKER_ID = w.WORKER_ID")
+	   public List<Approver> getApproverList();
+	   @Insert("INSERT INTO APPROVAL values(approval_seq.nextval,#{worker_id},#{approver_id},0,0,sysdate,#{approval_type},#{approval_msg})")
+	   public int getInsertReq(Approval ins);
+}

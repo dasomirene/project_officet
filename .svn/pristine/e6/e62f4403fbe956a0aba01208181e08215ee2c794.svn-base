@@ -1,0 +1,14 @@
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import officet.officet_vo.Worker;
+
+public interface A01_WorkerDao {
+	public List<Worker> getAllWorker();
+	public Worker loginCheck(@Param("worker_id") int worker_id,
+							  @Param("pass") String pass);
+}
+

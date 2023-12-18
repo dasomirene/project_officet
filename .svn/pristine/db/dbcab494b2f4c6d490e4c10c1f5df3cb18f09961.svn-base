@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:task="http://www.springframework.org/schema/task" 
+   xmlns:aop="http://www.springframework.org/schema/aop" 
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xmlns:p="http://www.springframework.org/schema/p"
+   xmlns:c="http://www.springframework.org/schema/c"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:util="http://www.springframework.org/schema/util"
+   xmlns:websocket="http://www.springframework.org/schema/websocket"
+   xmlns:sec="http://www.springframework.org/schema/security"
+   xmlns:tx="http://www.springframework.org/schema/tx" 
+    
+   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd       
+        http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd     
+        http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+         http://www.springframework.org/schema/websocket
+      http://www.springframework.org/schema/websocket/spring-websocket.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd   
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd   
+      ">
+	<context:component-scan base-package="officet">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>			
+	</context:component-scan>
+	<context:property-placeholder location="classpath:resource/config.file"/>
+	<!-- DB 연결 jdbc:oracle:thin:@localhost:1521:xe-->
+	 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	 	destroy-method="close">
+	 	<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@49.238.170.29:1521:xe"/>
+		<property name="username" value="himan"/>	 
+		<property name="password" value="7777"/>	 
+	 </bean>
+	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation"
+			value="classpath:resource/mybatis.Spring.xml"/>	
+	</bean> 
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage"
+			value="officet.officet_dao"/>
+	</bean>
+	<!-- 
+	# jsp뷰가 default인데, 이 뷰뿐만 아니라 선언된 뷰를 사용할려면 
+	두가지 뷰가 특정 규칙에 의해서 우선 순위가 설정이 되어야 한다.
+	1. 우선 jsp뷰를 제외한 bean으로 선언할 뷰 
+	2. 두번째 우선순위로 jsp 뷰 선언..
+	 -->
+	 <bean id="btnViewResolver"
+	 	class ="org.springframework.web.servlet.view.BeanNameViewResolver">
+	 	<property name="order" value="0"></property>	
+	 </bean>
+	 
+	 
+	 
+	 
+	 
+	 <!-- 추가되는 뷰가 적기 때문에 우선순위를 지정. 
+	 	return "파일업로드 view" ==> container에서 명식적으로 선언하여 
+	 		처리하는 뷰 
+	 -->
+	 <!-- 파일업로드 뷰 추가... 
+	 컨트롤러에 요청값으로 MultiPartFile이 파일업로드 객체로 사용할 수 있게 해준다. -->
+	 <bean id="multipartResolver"
+	  	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	 </bean>
+	 <!-- json 뷰 추가 -->
+	 <bean id="jsonView"
+	 	class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+	 	<property name="contentType" value="text/html;charset=utf-8"/>	 	
+	 </bean> 
+	 	
+	 
+	 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	 	<property name="order" value="1"></property>
+	 </bean>
+	 <!--그 외는 화면을 처리하는 viewer(jsp)로 우선순위를 뒤로 지정
+	 return"WEB-INF\\views\\a05_mvcexp\\a02_memberList.jsp";
+	  -->
+	 	 
+</beans>      

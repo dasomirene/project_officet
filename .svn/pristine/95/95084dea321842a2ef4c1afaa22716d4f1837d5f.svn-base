@@ -1,0 +1,42 @@
+package backendWeb.z01_vo;
+
+public class book {
+private String bname;
+private int price;
+private int cnt;
+private String boInfo;
+public book() {
+	// TODO Auto-generated constructor stub
+}
+public book(String bname, int price, int cnt, String boInfo) {
+	this.bname = bname;
+	this.price = price;
+	this.cnt = cnt;
+	this.boInfo = boInfo;
+}
+public String getBname() {
+	return bname;
+}
+public void setBname(String bname) {
+	this.bname = bname;
+}
+public int getPrice() {
+	return price;
+}
+public void setPrice(int price) {
+	this.price = price;
+}
+public int getCnt() {
+	return cnt;
+}
+public void setCnt(int cnt) {
+	this.cnt = cnt;
+}
+public String getBoInfo() {
+	return boInfo;
+}
+public void setBoInfo(String boInfo) {
+	this.boInfo = boInfo;
+}
+
+}

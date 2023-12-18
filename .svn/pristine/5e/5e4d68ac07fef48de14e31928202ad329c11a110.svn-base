@@ -1,0 +1,25 @@
+package officet.officet_controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class A05_Controller_Admin {
+	// http://49.238.170.29:5070/officet/admin_worker.do
+	
+	@RequestMapping("admin_worker.do")
+	public String employee_management() {
+		System.out.println("사원관리 페이지 접속");
+		return"WEB-INF\\views\\officet\\admin_worker.jsp";
+	}
+	@RequestMapping("admin_approval.do")
+	public String payment_management() {
+		System.out.println("결재관리 페이지 접속");
+		return"WEB-INF\\views\\officet\\admin_approval.jsp";
+	}
+	@RequestMapping("admin_attendance.do")
+	public String attendance_management() {
+		System.out.println("근태관리 페이지 접속");
+		return"WEB-INF\\views\\officet\\admin_attendance.jsp";
+	}
+}

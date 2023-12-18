@@ -1,0 +1,40 @@
+package officet.officet_service;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import officet.officet_dao.A01_WorkerDao;
+import officet.officet_vo.Worker;
+
+@Service
+public class A01_WorkerService {
+	@Autowired
+	private A01_WorkerDao dao;
+	
+	public List<Worker> getAllWorker(){		
+		System.out.println("getAllWorker 불러오기");
+		return dao.getAllWorker(); 
+	}
+	
+	public Worker loginCheck(int worker_id, String pass) {
+		boolean result = true;
+		Worker w = dao.loginCheck(worker_id, pass);
+		System.out.println("결과값>>>>>>"+result);
+		return w;
+	}
+	//나의 정보 업데이트
+	public void uptProfile(String n_name, String p_number, String region, int worker_id) {
+		dao.uptProfile(n_name, p_number, region, worker_id);
+		System.out.println("회원정보 수정 완료.");
+	}
+	// 나의 정보 불러오기
+	public Worker getProfile(int worker_id) {
+		System.out.println("프로필 정보 불러오기.");
+		return dao.getProfile(worker_id);
+	}
+	
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="officet.officet_dao.A03_AttendanceDao">
+	<select id="getWorkD" resultType="attendance">
+		SELECT COUNT(*) FROM ATTENDANCE WHERE WORKER_ID = #{worker_id}
+		AND CHECK_IN_STATUS='정상출근' AND CHECK_OUT_STATUS='정상퇴근'
+	</select>
+	<select id="getAbsentD" resultType="attendance">
+		SELECT COUNT(*) FROM ATTENDANCE WHERE WORKER_ID = #{worker_id}
+		AND CHECK_IN_STATUS='결근' AND CHECK_OUT_STATUS='결근'
+	</select>
+	<select id="getHoliD" resultType="attendance">
+		SELECT COUNT(*) FROM ATTENDANCE WHERE WORKER_ID = #{worker_id}
+		AND CHECK_IN_STATUS='휴가' AND CHECK_OUT_STATUS='휴가'
+	</select>
+	<select id="getSickD" resultType="attendance">
+		SELECT COUNT(*) FROM ATTENDANCE WHERE WORKER_ID = #{worker_id}
+		AND CHECK_IN_STATUS='병가' AND CHECK_OUT_STATUS='병가'
+	</select>
+	<select id="getEarlyLeaveD" resultType="attendance">
+		SELECT COUNT(*) FROM ATTENDANCE WHERE WORKER_ID = #{worker_id}
+		AND CHECK_OUT_STATUS='조퇴'
+	</select>
+	<select id="getLateD" resultType="attendance">
+		SELECT COUNT(*) FROM ATTENDANCE WHERE WORKER_ID = #{worker_id}
+		AND CHECK_IN_STATUS='지각'
+	</select>
+
+
+</mapper>

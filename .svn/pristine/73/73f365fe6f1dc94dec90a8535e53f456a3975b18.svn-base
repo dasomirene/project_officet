@@ -1,0 +1,6 @@
+package officet.officet_dao;
+
+public interface A02_ApprovalDao {
+
+}
+

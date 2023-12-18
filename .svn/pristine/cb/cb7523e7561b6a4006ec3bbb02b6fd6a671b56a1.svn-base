@@ -1,0 +1,66 @@
+package officet.officet_controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import officet.officet_service.A01_WorkerService;
+import officet.officet_vo.Worker;
+
+@Controller
+public class A05_Controller_Admin {
+   // http://49.238.170.29:5070/officet/admin_worker.do
+   @Autowired
+   private A01_WorkerService service;
+   
+   @GetMapping("admin_worker.do")
+   public String workerListAjax() {
+       System.out.println("사원관리 페이지 접속");      
+         return"WEB-INF\\views\\officet\\admin_worker.jsp";
+   }
+   
+   @RequestMapping("workerListData.do")
+   public ResponseEntity<List<Worker>> workerList(Worker sch) {
+      System.out.println("사원리스트 출력");
+      return ResponseEntity.ok(service.getWorkerList(sch));
+   }   
+   //등록
+   @RequestMapping("workerInsert.do")
+   public ResponseEntity<String> insertWorker(Worker ins){
+	   System.out.println(ins.getHire_date());
+      return ResponseEntity.ok(service.insertWorker(ins));
+   }
+   //상세
+   @RequestMapping("getWorker.do")
+   public ResponseEntity<Worker> getWorker(
+         @RequestParam("worker_id") int worker_id){
+      return ResponseEntity.ok(service.getWorker(worker_id));
+   }
+      @RequestMapping("updateWorker.do")
+      public ResponseEntity<String> updateWorker(Worker upt){
+         return ResponseEntity.ok(service.updateWorker(upt));
+      }   
+      @RequestMapping("deleteWorker.do")
+      public ResponseEntity<String> deleteWorker(
+            @RequestParam("worker_id") int worker_id){
+         return ResponseEntity.ok(service.deleteWorker(worker_id));
+      }   
+
+
+   @RequestMapping("admin_approval.do")
+   public String payment_management() {
+      System.out.println("결재관리 페이지 접속");
+      return "WEB-INF\\views\\officet\\admin_approval.jsp";
+   }
+
+   @RequestMapping("admin_attendance.do")
+   public String attendance_management() {
+      System.out.println("근태관리 페이지 접속");
+      return "WEB-INF\\views\\officet\\admin_attendance.jsp";
+   }
+}

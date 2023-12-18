@@ -1,0 +1,25 @@
+package officet.officet_controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class A04_Controller_Approval {
+	// http://49.238.170.29:5070/officet/approval_req.do
+	
+	@RequestMapping("approval_req.do")
+	public String approval_req() {
+		System.out.println("결재요청 페이지 접속");
+		return"WEB-INF\\views\\officet\\approval_req.jsp";
+	}
+	@RequestMapping("approval_app.do")
+	public String approval_app() {
+		System.out.println("결재승인 페이지 접속");
+		return"WEB-INF\\views\\officet\\approval_app.jsp";
+	}
+	@RequestMapping("approval_status.do")
+	public String approval_status() {
+		System.out.println("결재현황 페이지 접속");
+		return"WEB-INF\\views\\officet\\approval_status.jsp";
+	}
+}

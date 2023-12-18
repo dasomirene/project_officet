@@ -1,0 +1,33 @@
+package officet.officet_controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import officet.officet_service.A01_WorkerService;
+import officet.officet_vo.Worker;
+
+@Controller
+public class A02_Controller_Main {
+
+	@Autowired
+	A01_WorkerService workSrvice;
+
+	@RequestMapping("main.do")
+	public String main(Model d, HttpServletRequest request) {
+		System.out.println("메인페이지 접속");
+		HttpSession session = request.getSession();
+		Worker w = (Worker) session.getAttribute("userInfo");
+		System.out.println("세션값 >>>>" + w.getName() + " " + w.getAuth());
+		List<Worker> workerInfo = workSrvice.getAllWorker();
+		d.addAttribute("workerInfo", workerInfo);
+		return "WEB-INF\\views\\officet\\index.jsp";
+
+	}
+}

@@ -1,0 +1,52 @@
+package backendWeb.z01_vo;
+
+public class job_history {
+private int Employee_id;
+private String Start_DateS;
+private String End_DateS;
+private String Job_id;
+private int Department_id;
+public job_history() {
+	super();
+	// TODO Auto-generated constructor stub
+}
+public job_history(int employee_id, String start_DateS, String end_DateS, String job_id, int department_id) {
+	super();
+	Employee_id = employee_id;
+	Start_DateS = start_DateS;
+	End_DateS = end_DateS;
+	Job_id = job_id;
+	Department_id = department_id;
+}
+public int getEmployee_id() {
+	return Employee_id;
+}
+public void setEmployee_id(int employee_id) {
+	Employee_id = employee_id;
+}
+public String getStart_DateS() {
+	return Start_DateS;
+}
+public void setStart_DateS(String start_DateS) {
+	Start_DateS = start_DateS;
+}
+public String getEnd_DateS() {
+	return End_DateS;
+}
+public void setEnd_DateS(String end_DateS) {
+	End_DateS = end_DateS;
+}
+public String getJob_id() {
+	return Job_id;
+}
+public void setJob_id(String job_id) {
+	Job_id = job_id;
+}
+public int getDepartment_id() {
+	return Department_id;
+}
+public void setDepartment_id(int department_id) {
+	Department_id = department_id;
+}
+
+}

@@ -1,0 +1,57 @@
+package officet.officet_MVC;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+import officet.officet_Dao.Workers_Dao;
+import officet.officet_MVC.Of_Service;
+import officet.officet_vo.Workers;
+
+@Controller
+public class Of_Controller {
+	// http://localhost:2020/officet/workersList.do
+	// http://49.238.170.29:5070/officet/workersList.do
+	@Autowired
+	private Of_Service service;
+	public Of_Controller() {
+	}
+	@RequestMapping("workersList.do")
+	public String workersList(Workers sch, Model d){
+		d.addAttribute("worksList", service.getWorkers(sch));
+		return"WEB-INF\\views\\officet\\index.jsp";
+	}
+//	@RequestMapping("empDetail.do")
+//	public String empDetail(@RequestParam("empno") int empno,
+//			Model d){
+//		d.addAttribute("worksList", service.getEmp(empno));		
+//		return "WEB-INF\\views\\a02_emp\\a02_emp_detail.jsp";
+//	}
+//	@RequestMapping("empInsert.do")
+//	public String empInsert(Emp ins, Model d){
+//		// 요청값이 있을 type 맞고, property
+//		if(ins.getEmpno()!=0) {
+//			dao.insertEmp(ins);
+//			d.addAttribute("proc", "ins");//등록 처리 process
+//		}
+//			
+//		return "WEB-INF\\views\\a02_emp\\a03_insForm.jsp";
+//	}
+//	@RequestMapping("empUpdate.do")
+//	public String empUpdate(Emp upt, Model d){ // 수정 처리 process
+//		dao.updateEmp(upt);
+//		d.addAttribute("emp", dao.getEmp(upt.getEmpno()));
+//		d.addAttribute("proc", "upt");
+//		return "WEB-INF\\views\\a02_emp\\a02_emp_detail.jsp";
+//	}
+//	@RequestMapping("empDelete.do")
+//	public String empDelete(@RequestParam("empno") int empno, 
+//			Model d){
+//		dao.deleteEmp(empno);
+//		d.addAttribute("proc", "del"); // 삭제 처리 process
+//		return "WEB-INF\\views\\a02_emp\\a02_emp_detail.jsp";
+//	}
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >   
+<mapper namespace="officet.officet_dao.A02_ApprovalDao">
+   <select id="getApprovalList" resultType="approval">
+      SELECT
+          a.approval_id,
+          a.approval_step,
+          a.approval_status,
+          TO_CHAR(a.approval_request_time, 'YYYY-MM-DD HH24:MI:SS')
+          AS approval_request_date,w1.name AS worker_name,
+          w2.name AS approver_name
+          from
+          approval a
+      LEFT JOIN
+          worker w1 ON a.worker_id = w1.worker_id
+      LEFT JOIN
+          approver ap ON a.approver_id = ap.approver_id
+      LEFT JOIN
+          worker w2 ON ap.worker_id = w2.worker_id       
+   </select>
+   <select id="getApprovalList1" resultType="approval">
+      SELECT
+          a.approval_id,
+          a.approval_step,
+          a.approval_status,
+         TO_CHAR(a.approval_request_time, 'YYYY-MM-DD HH24:MI:SS') 
+          AS approval_request_date,w1.name AS worker_name,
+          w2.name AS approver_name
+          FROM 
+          approval a
+      LEFT JOIN
+          worker w1 ON a.worker_id = w1.worker_id
+      LEFT JOIN
+          approver ap ON a.approver_id = ap.approver_id
+      LEFT JOIN
+         worker w2 ON ap.worker_id = w2.worker_id
+         WHERE
+         APPROVAL_STEP =0
+
+
+                 
+   </select>
+   <select id="getApprovalList2" resultType="approval">
+      SELECT
+          a.approval_id,
+          a.approval_step,
+          a.approval_status,
+          TO_CHAR(a.approval_request_time, 'YYYY-MM-DD HH24:MI:SS')
+          AS approval_request_date,
+          w1.name AS worker_name,
+          w2.name AS approver_name
+          FROM 
+          approval a
+      LEFT JOIN
+          worker w1 ON a.worker_id = w1.worker_id
+      LEFT JOIN
+          approver ap ON a.approver_id = ap.approver_id
+      LEFT JOIN
+         worker w2 ON ap.worker_id = w2.worker_id
+         WHERE
+         APPROVAL_STEP =1    
+   </select>   
+   
+   
+</mapper>

@@ -1,0 +1,54 @@
+package officet.officet_Dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Date;
+import java.util.Map;
+import officet.officet_vo.Workers;
+public class Workers_Dao {
+    private Connection con;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
+    
+	public List<Workers> getWorkers(Workers sch) {
+	    List<Workers> wlist = new ArrayList<>();
+	    String sql = "SELECT * FROM workers where name like ? order by worker_no";
+	    
+	    try {
+	        con = DB.con();
+	        pstmt = con.prepareStatement(sql);
+	        pstmt.setString(1, '%'+sch.getName()+"%");
+	        rs = pstmt.executeQuery();
+//int worker_no, int team_no, String name, String n_name, String pass, String p_number,
+//	         String position_name, Date hire_date, int sal, String region, String auth, int mgr
+	
+	        while (rs.next()) {
+	            wlist.add(new Workers(
+	                    rs.getInt("worker_no"),
+	                    rs.getInt("team_no"),
+	                    rs.getString("name"),
+	                    rs.getString("n_name"),
+	                    rs.getString("pass"),
+	                    rs.getString("p_number"),
+	                    rs.getString("position_name"),
+	                    rs.getDate("hire_date"),
+	                    rs.getInt("sal"),
+	                    rs.getString("region"),
+	                    rs.getString("auth"),
+	                    rs.getInt("mgr")
+	            ));
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("DB 관련 오류: " + e.getMessage());
+	    } catch (Exception e) {
+	        System.out.println("일반 오류: " + e.getMessage());
+	    } finally {
+	        DB.close(rs, pstmt, con);
+	    }
+	    return wlist;
+	}
+}

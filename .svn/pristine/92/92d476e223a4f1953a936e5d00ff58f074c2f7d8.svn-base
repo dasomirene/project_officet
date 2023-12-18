@@ -1,0 +1,13 @@
+package officet;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class A01_StartController {
+	//http://localhost:5070/officet/start.do
+	@RequestMapping("start.do")
+	public String start() {
+		return"WEB-INF\\views\\a01_start\\a01_start.jsp";
+	}
+}

@@ -1,0 +1,45 @@
+package officet.officet_controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import officet.officet_service.A01_WorkerService;
+
+@Controller
+public class A03_Controller_Profile {
+	// http://49.238.170.29:5070/officet/profile.do
+	@Autowired
+	private A01_WorkerService service;
+
+	@RequestMapping("profile_edit.do")
+	public String profile_edit() {
+		System.out.println("정보 수정 페이지 접속");
+		return "WEB-INF\\views\\officet\\profile_edit.jsp";
+	}
+
+	// 프로필 조회 controller
+	@RequestMapping("profile.do")
+	public String profile(@RequestParam("worker_id") int worker_id, Model model) {
+		model.addAttribute("worker", service.getProfile(worker_id));
+		System.out.println("프로필 페이지 접속");
+		return "WEB-INF\\views\\officet\\profile.jsp";
+	}
+	// sidebar, topbar 등 마이페이지 이동 시, session객체 id 넘기도록
+
+	// 프로필 수정 controller
+	@RequestMapping("try/profile_edit.do")
+	public void try_profile_edit(HttpServletRequest request, @RequestParam("n_name") String n_name,
+			@RequestParam("p_number") String p_number, @RequestParam("region") String region,
+			@RequestParam("worker_id") int worker_id, Model model) {
+		System.out.println("프로필 수정 시도");
+		HttpSession session = request.getSession();
+		service.uptProfile(n_name, p_number, region, worker_id);
+		model.addAttribute("userInfo", session);
+	}
+}

@@ -1,0 +1,51 @@
+package officet;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class A01_StartController {
+	// http://localhost:5070/officet/start.do
+	// http://49.238.170.29:5070/officet/start.do
+	@RequestMapping("start.do")
+	public String start() {
+		System.out.println("start 시작");
+		return"WEB-INF\\views\\a01_start\\a01_start.jsp";
+	}
+	@RequestMapping("main.do")
+	public String main() {
+		System.out.println("메인페이지 접속");
+		return"WEB-INF\\views\\officet\\index.jsp";
+	}
+	@RequestMapping("login.do")
+	public String login() {
+		System.out.println("로그인 페이지 접속");
+		return "WEB-INF\\views\\officet\\login.jsp";
+	}
+	@RequestMapping("profile.do")
+	public String profile() {
+		System.out.println("프로필 페이지 접속");
+		return"WEB-INF\\views\\officet\\profile.jsp";
+	}
+	@RequestMapping("profile_edit.do")
+	public String profile_edit() {
+		System.out.println("정보 수정 페이지 접속");
+		return"WEB-INF\\views\\officet\\profile_edit.jsp";
+	}
+	@RequestMapping("approval_req.do")
+	public String approval_req() {
+		System.out.println("결재요청 페이지 접속");
+		return"WEB-INF\\views\\officet\\approval_req.jsp";
+	}
+	@RequestMapping("approval_app.do")
+	public String approval_app() {
+		System.out.println("결재승인 페이지 접속");
+		return"WEB-INF\\views\\officet\\approval_app.jsp";
+	}
+	@RequestMapping("approval_status.do")
+	public String approval_status() {
+		System.out.println("결재현황 페이지 접속");
+		return"WEB-INF\\views\\officet\\approval_status.jsp";
+	}
+	
+}

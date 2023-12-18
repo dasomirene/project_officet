@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >   
+<mapper namespace="officet.officet_dao.A02_ApprovalDao">
+   <select id="getApprovalList" resultType="approval">
+SELECT
+    a.approval_id,
+    a.approval_step,
+    a.approval_status,
+    a.approval_request_time,
+    w1.name AS worker_name,
+    w2.name AS approver_name,
+    t.team_name
+FROM 
+    approval a
+LEFT JOIN
+    worker w1 ON a.worker_id = w1.worker_id
+LEFT JOIN
+    approver ap ON a.approver_id = ap.approver_id
+LEFT JOIN
+    worker w2 ON ap.worker_id = w2.worker_id
+LEFT JOIN
+    team t ON w1.team_id = t.team_id
+   </select>
+   <select id="getApprovalList1" resultType="approval">
+SELECT
+    a.approval_id,
+    a.approval_step,
+    a.approval_status,
+    a.approval_request_time,
+    w1.name AS worker_name,
+    w2.name AS approver_name,
+    t.team_name
+FROM 
+    approval a
+LEFT JOIN
+    worker w1 ON a.worker_id = w1.worker_id
+LEFT JOIN
+    approver ap ON a.approver_id = ap.approver_id
+LEFT JOIN
+    worker w2 ON ap.worker_id = w2.worker_id
+LEFT JOIN
+    team t ON w1.team_id = t.team_id
+WHERE
+    approval_step = 0               
+   </select>
+   
+   <select id="getApprovalList2" resultType="approval">
+SELECT
+    a.approval_id,
+    a.approval_step,
+    a.approval_status,
+    a.approval_request_time,
+    w1.name AS worker_name,
+    w2.name AS approver_name,
+    t.team_name
+FROM 
+    approval a
+LEFT JOIN
+    worker w1 ON a.worker_id = w1.worker_id
+LEFT JOIN
+    approver ap ON a.approver_id = ap.approver_id
+LEFT JOIN
+    worker w2 ON ap.worker_id = w2.worker_id
+LEFT JOIN
+    team t ON w1.team_id = t.team_id
+WHERE
+    approval_step = 1 
+   </select>   
+   <select id="getApprovalList3" resultType="approval">
+SELECT
+    a.approval_id,
+    a.approval_step,
+    a.approval_status,
+    a.approval_request_time,
+    w1.name AS worker_name,
+    w2.name AS approver_name,
+    t.team_name
+FROM 
+    approval a
+LEFT JOIN
+    worker w1 ON a.worker_id = w1.worker_id
+LEFT JOIN
+    approver ap ON a.approver_id = ap.approver_id
+LEFT JOIN
+    worker w2 ON ap.worker_id = w2.worker_id
+LEFT JOIN
+    team t ON w1.team_id = t.team_id
+WHERE
+    approval_step = 2
+   </select>   
+   
+<update id="updateApprovalStatus">
+    UPDATE approval
+    SET approval_status =
+        CASE
+            WHEN #{status} = 0 THEN 0
+            WHEN #{status} = 1 THEN 1
+            WHEN #{status} = 2 THEN 2
+            ELSE approval_status
+        END,
+        approval_step =
+        CASE
+            WHEN #{status} = 1 THEN
+                CASE
+                    WHEN approval_step = 0 THEN 1
+                    WHEN approval_step = 1 THEN 2
+                    ELSE approval_step
+                END
+            WHEN #{status} = 2 THEN 2
+            ELSE approval_step
+        END
+    WHERE approval_id = #{approvalId}
+</update>
+   
+</mapper>

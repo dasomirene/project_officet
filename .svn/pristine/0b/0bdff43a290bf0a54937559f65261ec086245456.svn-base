@@ -1,0 +1,22 @@
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import officet.officet_vo.Attendance;
+
+public interface A03_AttendanceDao {
+
+	// 출격검색탭
+	   @Select("SELECT * FROM attendance WHERE CHECK_IN_STATUS like '%'||#{check_in_status}||'%'"
+	         + "and CHECK_OUT_STATUS like '%'||#{check_out_status}||'%' "
+	         + "and to_char(today_date,'yyyy') like '%'||#{year}||'%' and to_char(today_date,'MM') like '%'||#{month}||'%'"
+	         + "and WORKER_ID = #{worker_id} order by today_date desc")
+	   public List<Attendance> getAttSch(@Param("worker_id") int worker_id, 
+	                             @Param("check_in_status") String check_in_status,
+	                             @Param("check_out_status") String check_out_status,
+	                             @Param("year") int year,
+	                             @Param("month") int month);
+}

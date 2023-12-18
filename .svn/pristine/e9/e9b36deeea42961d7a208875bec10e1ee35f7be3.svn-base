@@ -1,0 +1,47 @@
+package officet.officet_controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import officet.officet_service.A01_WorkerService;
+
+@Controller
+public class A05_Controller_Admin {
+	// http://49.238.170.29:5070/officet/admin_worker.do
+	@Autowired
+	private A01_WorkerService service;
+
+	@RequestMapping("admin_worker.do")
+	   public String employee_management(@RequestParam(required=false)String team_name,
+	                                          @RequestParam(required=false)String name,Model d) {   
+	      d.addAttribute("teamList", service.getAllTeams());
+	      d.addAttribute("workerNames", service.getAllWorkerNames());
+	      
+	      if(team_name != null&& !team_name.isEmpty()) {
+	         d.addAttribute("workerList",service.schWorkerByTeam(team_name));
+	      }else if(name!=null&&!name.isEmpty()){
+	         d.addAttribute("workerList",service.schWorkerByName(name) );
+	      }else {
+	         d.addAttribute("workerList",service.schWorker());
+	      }
+	      System.out.println("사원관리 페이지 접속");      
+	      return"WEB-INF\\views\\officet\\admin_worker.jsp";
+	   }
+
+
+
+	@RequestMapping("admin_approval.do")
+	public String payment_management() {
+		System.out.println("결재관리 페이지 접속");
+		return "WEB-INF\\views\\officet\\admin_approval.jsp";
+	}
+
+	@RequestMapping("admin_attendance.do")
+	public String attendance_management() {
+		System.out.println("근태관리 페이지 접속");
+		return "WEB-INF\\views\\officet\\admin_attendance.jsp";
+	}
+}

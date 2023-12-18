@@ -1,0 +1,67 @@
+package officet.officet_vo;
+
+import java.util.Date;
+
+// 결재
+public class Approval {
+
+	// 필드
+	private int approval_id;		// 결재 id
+	private int worker_id;			// 사원 id
+	private int approver_id;		// 승인자 id
+	private int approval_step;			// 결재 단계
+	private int approval_status;		// 결재 상태
+	private Date approval_request_time;		// 결재 요청 시간
+	
+	// 생성자
+	public Approval() {}
+			
+	public Approval(int approval_id, int worker_id, int approver_id, int approval_step, int approval_status,
+			Date approval_request_time) {
+		this.approval_id = approval_id;
+		this.worker_id = worker_id;
+		this.approver_id = approver_id;
+		this.approval_step = approval_step;
+		this.approval_status = approval_status;
+		this.approval_request_time = approval_request_time;
+	}
+	
+	// getter / setter
+	public int getApproval_id() {
+		return approval_id;
+	}
+	public void setApproval_id(int approval_id) {
+		this.approval_id = approval_id;
+	}
+	public int getWorker_id() {
+		return worker_id;
+	}
+	public void setWorker_id(int worker_id) {
+		this.worker_id = worker_id;
+	}
+	public int getApprover_id() {
+		return approver_id;
+	}
+	public void setApprover_id(int approver_id) {
+		this.approver_id = approver_id;
+	}
+	public int getApproval_step() {
+		return approval_step;
+	}
+	public void setApproval_step(int approval_step) {
+		this.approval_step = approval_step;
+	}
+	public int getApproval_status() {
+		return approval_status;
+	}
+	public void setApproval_status(int approval_status) {
+		this.approval_status = approval_status;
+	}
+	public Date getApproval_request_time() {
+		return approval_request_time;
+	}
+	public void setApproval_request_time(Date approval_request_time) {
+		this.approval_request_time = approval_request_time;
+	}
+	
+}

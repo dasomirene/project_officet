@@ -1,0 +1,8 @@
+package officet.officet_controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class A01_Controller_Main {
+
+}

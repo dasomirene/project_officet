@@ -1,0 +1,15 @@
+package officet.officet_dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import officet.officet_vo.Approval;
+@Repository
+public interface A02_ApprovalDao {
+   public List<Approval> getApprovalList();
+   public List<Approval> getApprovalList1();
+   public List<Approval> getApprovalList2();
+   public void updateApprovalStatus(@Param("approvalId") int approvalId, @Param("status") int status);
+}

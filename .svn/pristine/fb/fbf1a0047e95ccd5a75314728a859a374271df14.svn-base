@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >	
+<mapper namespace="officet.officet_dao.A01_WorkerDao">
+	<select id="getAllWorker" resultType="worker">
+		select * from WORKER
+	</select>
+	<select id="loginCheck" resultType="worker">
+		select worker_id, pass 
+		from worker
+		where worker_id=#{worker_id}
+		and pass=#{pass}
+	</select>
+	
+</mapper>

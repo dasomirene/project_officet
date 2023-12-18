@@ -1,0 +1,125 @@
+package officet.officet_service;
+
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import officet.officet_dao.A01_WorkerDao;
+import officet.officet_vo.Attendance;
+import officet.officet_vo.Worker;
+
+@Service
+public class A01_WorkerService {
+	@Autowired
+	private A01_WorkerDao dao;
+
+	public List<Worker> getAllWorker() {
+		System.out.println("getAllWorker 불러오기");
+		return dao.getAllWorker();
+	}
+
+	public Worker loginCheck(int worker_id, String pass) {
+		boolean result = true;
+		Worker w = dao.loginCheck(worker_id, pass);
+		System.out.println("결과값>>>>>>" + result);
+		return w;
+	}
+	 // 출퇴근 상태 확인
+	   public Map<String, Boolean> checkAtt(int worker_id){
+	      Map<String, Boolean> attInfo = new HashMap<>();
+	      Attendance att = dao.getAttInfo(worker_id);
+	      if (att==null) {
+	         attInfo.put("check_in", false);
+	         attInfo.put("check_out", false);
+	      } else {
+	         attInfo.put("check_in", true);
+	         if(att.getCheck_out_time()==null) {
+	            attInfo.put("check_out", false);
+	         } else {
+	            attInfo.put("check_out", true);
+	         }
+	      }
+	      return attInfo;
+	   }
+	   // 출근
+	   public void check_in(int worker_id) {
+	      String check_in_status = "";
+	      LocalTime now = LocalTime.now();
+	      LocalTime beforeNine = LocalTime.of(8, 50);
+	      LocalTime afterNine = LocalTime.of(9, 10);
+	      if(now.isBefore(afterNine) && now.isAfter(beforeNine)) {
+	         check_in_status="정상출근";
+	      } else {
+	         check_in_status="지각";
+	      }
+	      dao.check_in(worker_id, check_in_status);
+	   }
+	   // 퇴근
+	   public void check_out(int worker_id) {
+	      String check_out_status = "";
+	      LocalTime now = LocalTime.now();
+	      LocalTime beforeSix = LocalTime.of(17, 50);
+	      if(now.isAfter(beforeSix)) {
+	         check_out_status = "정상퇴근";
+	      } else {
+	         check_out_status = "조퇴";
+	      }
+	      dao.check_out(worker_id, check_out_status);
+	   }
+	   
+	   // 출퇴근 시간정보 가져오기
+	   public Attendance getAttInfo(int worker_id) {
+	      Attendance attInfo = dao.getAttInfo(worker_id);
+	      return attInfo;
+	   }
+
+
+	// 유저정보
+	public Worker getUserInfo(int worker_id) {
+		Worker w = dao.getUserInfo(worker_id);
+		return w;
+	}
+
+	// 나의 정보 업데이트
+	public void uptProfile(String n_name, String p_number, String region, int worker_id) {
+		dao.uptProfile(n_name, p_number, region, worker_id);
+		System.out.println("회원정보 수정 완료.");
+	}
+
+	// 나의 정보 불러오기
+	public Worker getProfile(int worker_id) {
+		System.out.println("프로필 정보 불러오기.");
+		return dao.getProfile(worker_id);
+	}
+
+	//select 조회
+	   public List<String>getAllTeams(){
+	      System.out.println("모든 팀명조회");
+	      return dao.getAllTeams();
+	   }
+	   public List<String> getAllWorkerNames() {
+	      System.out.println("모든사원명조회");
+	        return dao.getAllWorkerNames();
+	    }   
+	   //사원 리스트
+	   public List<Worker> schWorkerByTeam(String team_name) {
+	      System.out.println("팀명조회");
+	      return dao.schWorkerByTeam(team_name);
+	   }
+	   // 사원명 조회
+	    public List<Worker> schWorkerByName(String name) {
+	           System.out.println("사원명조회");
+	           return dao.schWorkerByName(name);
+	       }
+	   //사원 리스트
+	      public List<Worker> schWorker() {
+	         System.out.println("사원리스트불러오기");
+	         return dao.schWorker();
+	      }
+
+
+}

@@ -1,0 +1,20 @@
+package officet;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class A01_StartController {
+	// http://localhost:5070/officet/start.do
+	// http://49.238.170.29/:5070/officet/start.do
+	@RequestMapping("start.do")
+	public String start() {
+		System.out.println("start 시작");
+		return"WEB-INF\\views\\a01_start\\a01_start.jsp";
+	}
+	@RequestMapping("main.do")
+	public String main() {
+		System.out.println("메인페이지 오픈 합니다");
+		return"WEB-INF\\views\\officet\\index.jsp";
+	}
+}

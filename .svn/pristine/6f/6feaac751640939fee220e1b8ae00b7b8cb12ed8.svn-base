@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="officet.officet_dao.A01_WorkerDao">
+	<select id="getAllWorker" resultType="worker">
+		select * from WORKER
+	</select>
+	<select id="loginCheck" resultType="worker">
+		select *
+		from worker
+		where
+		worker_id=#{worker_id}
+		and pass=#{pass}
+	</select>
+	<!--유저정보 가져오기 -->
+	<select id="getUserInfo" resultType="worker">
+		select *
+		from worker
+		where
+		worker_id=#{worker_id}
+	</select>
+
+	<!--프로필 update -->
+	<select id="uptProfile" resultType="worker">
+		UPDATE WORKER
+		SET
+		N_NAME=#{n_name},
+		P_NUMBER=#{p_number},
+		REGION =#{region}
+		WHERE WORKER_ID
+		=#{worker_id}
+	</select>
+
+	<!-- 프로필조회 -->
+	<select id="getProfile" resultType="worker">
+		SELECT *
+		FROM WORKER
+		WHERE
+		worker_id=#{worker_id}
+	</select>
+
+	<!-- 관리자 사원관리 리스트조회 -->
+   <select id="schWorker" resultType="worker">
+      SELECT
+       w.WORKER_ID,
+       t.TEAM_NAME,
+       w.NAME,
+       w.N_NAME,
+       w.P_NUMBER,
+       w.POSITION_NAME,
+       w.HIRE_DATE,
+       w.SAL,
+       w.AUTH
+      FROM
+         WORKER w
+      JOIN
+         TEAM t ON w.TEAM_ID = t.TEAM_ID
+   </select>
+   <select id="getAllTeams" resultType="string">
+    SELECT DISTINCT TEAM_NAME FROM TEAM
+   </select>
+   <select id="getAllWorkerNames" resultType="string">
+    SELECT DISTINCT NAME FROM WORKER
+   </select>
+<select id="schWorkerByTeam" parameterType="string" resultType="worker">
+    SELECT
+        w.WORKER_ID,
+        t.TEAM_NAME,
+        w.NAME,
+        w.N_NAME,
+        w.P_NUMBER,
+        w.POSITION_NAME,
+        w.HIRE_DATE,
+        w.SAL,
+        w.AUTH
+    FROM WORKER w
+    JOIN TEAM t ON w.TEAM_ID = t.TEAM_ID
+    WHERE t.TEAM_NAME = #{teamName}
+</select>
+<select id="schWorkerByName" parameterType="string" resultType="worker">
+    SELECT
+        w.WORKER_ID,
+        t.TEAM_NAME,
+        w.NAME,
+        w.N_NAME,
+        w.P_NUMBER,
+        w.POSITION_NAME,
+        w.HIRE_DATE,
+        w.SAL,
+        w.AUTH
+    FROM WORKER w
+    JOIN TEAM t ON w.TEAM_ID = t.TEAM_ID
+    WHERE w.NAME = #{name}
+</select>
+
+</mapper>

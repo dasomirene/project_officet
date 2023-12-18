@@ -1,0 +1,38 @@
+package officet.officet_controller;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import officet.officet_service.A01_WorkerService;
+
+@Controller
+public class A01_Controller_Login {
+	// http://49.238.170.29:5070/officet/login.do
+	
+	@Autowired
+	A01_WorkerService service;
+	
+	@RequestMapping("login.do")
+	public String login() {
+		System.out.println("로그인 페이지 접속");
+		return "WEB-INF\\views\\officet\\login.jsp";
+	}
+	@RequestMapping(value="loginCheck.do")
+	@ResponseBody
+	public String loginCheck(HttpSession session, Model d,
+							@RequestParam("worker_id") int worker_id,
+							@RequestParam("pass") String pass) {
+		System.out.println("아이디 : "+worker_id);
+		boolean result=service.loginCheck(worker_id, pass, session);
+		String resultS = String.valueOf(result);
+		System.out.println("자바단 결과값>>>>>>>>>"+resultS);
+		d.addAttribute("data", resultS);
+		return resultS;
+	}
+}
